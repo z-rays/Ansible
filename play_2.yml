@@ -1,3 +1,4 @@
+---
 - hosts: all
   collections:
   - ibm.ibm_zos_core
