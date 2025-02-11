@@ -1,0 +1,29 @@
+---
+- hosts: all
+  collections:
+  - ibm.ibm_zos_core
+  gather_facts: no
+
+  environment:
+    ZOAU_HOME: "/usr/lpp/IBM/zoautil/"
+    ZOAU: "/usr/lpp/IBM/zoautil/bin"
+    PYZ: "/usr/lpp/IBM/cyp/pyz"
+    ansible_pipelining: true
+    ansible_scp_extra_args: "-O"
+    PATH: "/usr/lpp/IBM/zoautil/bin:/usr/lpp/IBM/cyp/pyz/bin:/bin:/usr/sbin:/var/bin"
+    LIBPATH: "/usr/lpp/IBM/zoautil/lib:/usr/lpp/IBM/cyp/pyz/lib:/lib:/usr/lib:."
+    _BPXK_AUTOCVT: 'ON'
+    _CEE_RUNOPTS: 'FILETAG(AUTOCVT,AUTOTAG) POSIX(ON)'
+    _TAG_REDIR_ERR: 'txt'
+    _TAG_REDIR_IN: 'txt'
+    _TAG_REDIR_OUT: 'txt'
+
+  tasks:
+    - name: Execute an operator command to show cpu on LPAR
+      zos_operator:
+        cmd: 'd m=cpu'
+      register: cpu_result
+
+    - name: print msg
+      debug:
+        msg: "{{ cpu_result }}"
